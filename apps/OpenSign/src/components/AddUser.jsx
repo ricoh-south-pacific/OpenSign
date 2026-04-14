@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import Parse from "parse";
 import Loader from "../primitives/Loader";
 import {
-  copytoData,
   usertimezone
 } from "../constant/Utils";
 import {
@@ -121,7 +120,7 @@ const AddUser = (props) => {
               team: "",
               role: ""
             });
-            props.showAlert("success", t("user-created-successfully"));
+            props.showAlert("success", "User created. Invite email sent to " + formdata.email);
           } catch (err) {
             console.log("err", err);
             setIsFormLoader(false);
@@ -149,10 +148,6 @@ const AddUser = (props) => {
     setFormdata((prev) => ({ ...prev, [name]: value }));
   };
 
-  const copytoclipboard = (text) => {
-    copytoData(text);
-    props.showAlert("success", t("copied"));
-  };
   return (
     <div className="shadow-md rounded-box my-[1px] p-3 bg-base-100 relative">
       {isFormLoader && (
@@ -207,18 +202,8 @@ const AddUser = (props) => {
                         />
                       </div>
                       <div className="mb-3">
-                        <label className="block text-xs font-semibold">
-                          {t("password")}
-                        </label>
-                        <div className="flex justify-between items-center op-input op-input-bordered op-input-sm text-base-content w-full h-full text-[13px]">
-                          <div className="break-all">{formdata?.password}</div>
-                          <i
-                            onClick={() => copytoclipboard(formdata?.password)}
-                            className="fa-light fa-copy rounded-full hover:bg-base-300 p-[8px] cursor-pointer "
-                          ></i>
-                        </div>
-                        <div className="text-[12px] ml-2 mb-0 text-[red] select-none">
-                          {t("password-generated")}
+                        <div className="text-[12px] ml-1 text-base-content/60 select-none">
+                          {t("An invite email will be sent to the user to set their password.")}
                         </div>
                       </div>
                       <div className="mb-3">

@@ -34,6 +34,7 @@ const UpdateExistUserAdmin = lazyWithRetry(
 );
 const Preferences = lazyWithRetry(() => import("./pages/Preferences"));
 const Login = lazyWithRetry(() => import("./pages/Login"));
+const AcceptInvite = lazyWithRetry(() => import("./pages/AcceptInvite"));
 const VerifyDocument = lazyWithRetry(() => import("./pages/VerifyDocument"));
 const EmailBuilder = lazyWithRetry(() => import("./pages/EmailBuilder"));
 
@@ -88,6 +89,10 @@ function App() {
               <Route
                 path="/forgetpassword"
                 element={<Lazy Page={ForgetPassword} />}
+              />
+              <Route
+                path="/accept-invite"
+                element={<Lazy Page={AcceptInvite} />}
               />
             <Route element={<HomeLayout />}>
                   <Route path="/users" element={<UserList />} />
