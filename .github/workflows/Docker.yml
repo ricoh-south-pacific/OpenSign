@@ -1,66 +1,70 @@
-name: ci
+name: build-and-push
 
-# 👇 add this block
-permissions:
-  contents: read        # allow checkout & metadata-action to read repo
-  id-token: write       # needed by docker/metadata-action v4
+# Build the RSP OpenSign fork and publish images to GitHub Container Registry (GHCR),
+# owned by the ricoh-south-pacific org. No Docker Hub account or local build needed.
+#
+#   ghcr.io/ricoh-south-pacific/opensign-client
+#   ghcr.io/ricoh-south-pacific/opensign-server
+#
+# Deploy (on the Azure VM): docker compose pull && docker compose up -d --force-recreate
+# Trigger manually the first time via the "Run workflow" button (workflow_dispatch).
 
 on:
   push:
     branches:
-      - 'main'
-      - 'staging'
+      - staging
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
 
 jobs:
-  docker:
+  build:
     runs-on: ubuntu-latest
     strategy:
+      fail-fast: false
       matrix:
         include:
-          - image: opensign/opensign
+          - name: opensign-client
             dockerfile: apps/OpenSign/Dockerhubfile
-          - image: opensign/opensignserver
+          - name: opensign-server
             dockerfile: apps/OpenSignServer/Dockerhubfile
-
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      # 👇 Enable emulation so we can build for arm64 on amd64 runners
-      - name: Set up QEMU
-        uses: docker/setup-qemu-action@v2
-        with:
-          platforms: linux/amd64,linux/arm64
-
-      # 👇 Enable Buildx for multi-arch builds
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v2
+        uses: docker/setup-buildx-action@v3
 
-      - name: Login to Docker Hub
-        uses: docker/login-action@v2
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
         with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Extract metadata (tags, labels) for Docker
+      - name: Extract metadata (tags, labels)
         id: meta
-        uses: docker/metadata-action@v4
+        uses: docker/metadata-action@v6
         with:
-          images: ${{ matrix.image }}
+          images: ghcr.io/${{ github.repository_owner }}/${{ matrix.name }}
+          tags: |
+            type=raw,value=latest,enable={{is_default_branch}}
+            type=ref,event=branch
+            type=sha,format=short
 
-      - name: Debug - List files opensign
-        run: ls -R apps/OpenSign/  # Adjust the path as needed
-
-      - name: Debug - List files opensignserver
-        run: ls -R apps/OpenSignServer/  # Adjust the path as needed  
-
-      - name: Build and push (multi-arch)
-        uses: docker/build-push-action@v4
+      # Prod (Azure B1ms) is linux/amd64 only — build a single arch to keep CI fast
+      # and avoid QEMU emulation (especially for the LibreOffice-based server image).
+      - name: Build and push
+        uses: docker/build-push-action@v7
         with:
           context: .
           file: ${{ matrix.dockerfile }}
           push: true
-          # 👇 Build for both AMD64 & ARM64
-          platforms: linux/amd64,linux/arm64
+          platforms: linux/amd64
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha,scope=${{ matrix.name }}
+          cache-to: type=gha,scope=${{ matrix.name }},mode=max

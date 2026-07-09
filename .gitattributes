@@ -1,0 +1,4 @@
+# Force LF for shell scripts regardless of the OS the repo is checked out on.
+# Windows (core.autocrlf=true) would otherwise inject CRLF, which breaks the
+# container entrypoints during the Docker build (e.g. apps/OpenSign/entrypoint.sh).
+*.sh text eol=lf
