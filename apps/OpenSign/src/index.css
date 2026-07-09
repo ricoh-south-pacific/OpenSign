@@ -2,8 +2,35 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  /* RSP (Ricoh South Pacific) brand tokens.
+     Source of truth: rsp-website repo -> src/brands/ricoh/tokens.css.
+     Keep in sync rather than hard-coding hex values elsewhere. */
+  --color-brand: #d7063b;
+  --color-brand-dark: #a50532;
+  --color-ink: #1a1a1a;
+  --color-ink-deep: #0f0f0f;
+  --color-grey: #5a5a5a;
+  --color-grey-light: #e5e5e5;
+  --color-surface: #f7f7f7;
+  --brand-rgb: 215, 6, 59;
+  --ink-rgb: 26, 26, 26;
+
+  --rsp-font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto,
+    sans-serif;
+}
+
 body {
   background-color: white;
+  font-family: var(--rsp-font-family);
+}
+
+/* Form controls do not inherit font-family by default */
+button,
+input,
+select,
+textarea {
+  font-family: inherit;
 }
 
 /* Custom CSS to hide scrollbar */

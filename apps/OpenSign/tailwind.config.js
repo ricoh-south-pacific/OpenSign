@@ -80,13 +80,13 @@ module.exports = {
     themes: [
       {
         opensigndark: {
-          primary: "#007ACC", // VS Code blue - CTA & highlight color
+          primary: "#D7063B", // Ricoh brand red - CTA & highlight color
           "primary-content": "#FFFFFF",
 
           secondary: "#1F2937", // Sidebar background (darker slate)
           "secondary-content": "#E5E7EB",
 
-          accent: "#4A9EFF", // Lighter VS Code blue for hover, minor CTA
+          accent: "#FF3D64", // Lighter Ricoh red for hover, minor CTA (dark-mode contrast)
           "accent-content": "#FFFFFF",
 
           neutral: "#3C3C3C", // VS Code inactive/disabled element background
@@ -122,18 +122,21 @@ module.exports = {
       },
       {
         opensigncss: {
-          primary: "#002864",
-          "primary-content": "#cacccf",
-          secondary: "#29354a",
-          "secondary-content": "#c8d1e0",
-          accent: "#E10032",
-          "accent-content": "#ffd8d5",
-          neutral: "#c1ccdb",
-          "neutral-content": "#111312",
+          // RSP (Ricoh South Pacific) brand palette.
+          // Source of truth: rsp-website repo -> src/brands/ricoh/tokens.css.
+          // Keep in sync with that file rather than editing hex values here.
+          primary: "#D7063B", // Ricoh brand red - CTA & highlight
+          "primary-content": "#ffffff",
+          secondary: "#1A1A1A", // ink - dark UI / sidebar
+          "secondary-content": "#ffffff",
+          accent: "#A50532", // brand-dark - hover / secondary CTA
+          "accent-content": "#ffffff",
+          neutral: "#5A5A5A", // grey
+          "neutral-content": "#ffffff",
           "base-100": "#ffffff",
-          "base-200": "#dedede",
-          "base-300": "#bebebe",
-          "base-content": "#161616",
+          "base-200": "#F7F7F7", // surface
+          "base-300": "#E5E5E5", // grey-light
+          "base-content": "#1A1A1A", // ink
           info: "#00b6ff",
           "info-content": "#f5f5f4",
           success: "#00a96e",
