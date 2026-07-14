@@ -81,7 +81,7 @@ function SignYourSelf() {
   const windowSize = useWindowSize();
   const isShowModal = useSelector((state) => state.widget.isShowModal);
   const appName =
-    "OpenSign™";
+    "RSP eSignature";
   const divRef = useRef(null);
   const nodeRef = useRef(null);
   const pdfRef = useRef();

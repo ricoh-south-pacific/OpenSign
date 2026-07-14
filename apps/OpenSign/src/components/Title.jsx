@@ -58,7 +58,7 @@ export default function Title() {
   const { pathname, state } = useLocation();
   const { t } = useTranslation();
   const appName =
-    "OpenSign™";
+    "RSP eSignature";
   const logo = useMemo(() => localStorage.getItem("favicon"), []);
   const prefix = useMemo(
     () => resolveTitle(pathname, state?.title),

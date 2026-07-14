@@ -31,7 +31,7 @@ const EditTemplate = ({
   isAddYourSelfCheckbox,
 }) => {
   const appName =
-    "OpenSign™";
+    "RSP eSignature";
   const { t } = useTranslation();
   const inputFileRef = useRef(null);
   const [formData, setFormData] = useState({

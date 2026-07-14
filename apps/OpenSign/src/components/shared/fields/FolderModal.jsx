@@ -7,7 +7,7 @@ import { useTranslation } from "react-i18next";
 const FolderModal = (props) => {
   const { t } = useTranslation();
   const appName =
-    "OpenSign™";
+    "RSP eSignature";
   const drivename = appName === "OpenSign™" ? "OpenSign™" : "";
   const [clickFolder, setClickFolder] = useState("");
   const [folderList, setFolderList] = useState([]);
