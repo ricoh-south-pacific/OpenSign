@@ -21,6 +21,7 @@ import {
 import Loader from "../primitives/Loader";
 import { useTranslation } from "react-i18next";
 import SelectLanguage from "../components/pdf/SelectLanguage";
+import { getMsalInstance, loginRequest, ssoEnabled } from "../constant/msalConfig";
 
 function Login() {
   const appName =
@@ -142,6 +143,32 @@ function Login() {
       return;
     }
     await handleLogin();
+  };
+
+  // Microsoft Entra (Azure AD) SSO: sign in via MSAL, exchange the id_token for
+  // a Parse session (loginWithEntra), then reuse the session-token login flow.
+  const handleMicrosoftLogin = async () => {
+    try {
+      setState({ ...state, thirdpartyLoader: true });
+      const instance = await getMsalInstance();
+      if (!instance) return;
+      const result = await instance.loginPopup(loginRequest);
+      const idToken = result?.idToken;
+      if (!idToken) throw new Error("no-id-token");
+      const _user = await Parse.Cloud.run("loginWithEntra", {
+        id_token: idToken,
+      });
+      if (_user?.sessionToken) {
+        await thirdpartyLoginfn(_user.sessionToken);
+      } else {
+        showToast("danger", t("something-went-wrong-mssg"));
+        setState({ ...state, thirdpartyLoader: false });
+      }
+    } catch (error) {
+      console.error("Microsoft SSO login failed", error);
+      showToast("danger", error?.message || t("something-went-wrong-mssg"));
+      setState({ ...state, thirdpartyLoader: false });
+    }
   };
 
   const setThirdpartyLoader = (value) => {
@@ -518,6 +545,29 @@ function Login() {
                       </button>
                     </div>
                   </form>
+                  {ssoEnabled && (
+                    <div className="mt-3">
+                      <div className="flex items-center gap-2 my-2 text-[11px] uppercase tracking-wide text-gray-400">
+                        <span className="h-px flex-1 bg-gray-300"></span>
+                        or
+                        <span className="h-px flex-1 bg-gray-300"></span>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={handleMicrosoftLogin}
+                        disabled={state.loading || state.thirdpartyLoader}
+                        className="op-btn op-btn-outline w-full flex items-center justify-center gap-2"
+                      >
+                        <i
+                          className="fa-brands fa-microsoft"
+                          aria-hidden="true"
+                        ></i>
+                        {state.thirdpartyLoader
+                          ? t("loading")
+                          : "Sign in with Microsoft"}
+                      </button>
+                    </div>
+                  )}
                 </div>
                 {width >= 768 && (
                   <div className="place-self-center">
