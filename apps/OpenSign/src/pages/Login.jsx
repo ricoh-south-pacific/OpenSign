@@ -155,7 +155,7 @@ function Login() {
       const result = await instance.loginPopup(loginRequest);
       const idToken = result?.idToken;
       if (!idToken) throw new Error("no-id-token");
-      const _user = await Parse.Cloud.run("loginWithEntra", {
+      const _user = await Parse.Cloud.run("loginwithentra", {
         id_token: idToken,
       });
       if (_user?.sessionToken) {
