@@ -57,8 +57,12 @@ const Header = ({ isConsole, setIsLoggingOut }) => {
       if (applogo?.logo) {
         setAppLogo(applogo?.logo);
       } else {
-        const logo = localStorage.getItem("appLogo") || appInfo.applogo;
-        setAppLogo(logo);
+        // No tenant-specific logo: always use the current build's bundled
+        // default. A cached "appLogo" may point at a previous build's hashed
+        // asset path (e.g. logo-<oldhash>.svg) that now 404s, so never prefer
+        // it over appInfo.applogo. Refresh the cache to the current value.
+        setAppLogo(appInfo.applogo);
+        localStorage.setItem("appLogo", appInfo.applogo);
       }
   }
   const handleLogout = async () => {
