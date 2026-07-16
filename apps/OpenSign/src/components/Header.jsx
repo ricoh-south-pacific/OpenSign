@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import dp from "../assets/images/dp.png";
+import logoWhite from "../assets/images/rsp-logo-white.svg";
 import FullScreenButton from "./FullScreenButton";
 import ThemeToggle from "./ThemeToggle";
 import { useNavigate } from "react-router";
@@ -147,11 +148,7 @@ const Header = ({ isConsole, setIsLoggingOut }) => {
             {applogo && (
               <img
                 className="object-contain h-full w-auto"
-                src={
-                      isDarkTheme
-                      ? "/static/js/assets/images/logo-dark.png"
-                      : applogo
-                }
+                src={isDarkTheme ? logoWhite : applogo}
                 alt="logo"
               />
             )}
