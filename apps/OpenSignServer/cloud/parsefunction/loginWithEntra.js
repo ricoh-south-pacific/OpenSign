@@ -74,6 +74,11 @@ export default async function loginWithEntra(request) {
     );
   }
 
+  // 3b) Sync the user's profile photo from Microsoft Graph on first SSO login.
+  // Only set it when the user has no picture yet, so a manually-uploaded avatar
+  // is never overwritten. Failures (no photo / Graph error) are non-fatal.
+  await syncEntraPhoto(user, request.params.access_token);
+
   // 4) Mint a session for the user via the master-key /loginAs endpoint.
   const axiosRes = await axios({
     method: 'POST',
@@ -87,4 +92,27 @@ export default async function loginWithEntra(request) {
   });
   const login = axiosRes.data;
   return { id: login.objectId, sessionToken: login.sessionToken };
+}
+
+// Fetch the signed-in user's photo from Microsoft Graph and store it as their
+// ProfilePic (base64 data URI). No-op if there's no access token, the user
+// already has a picture, or Graph returns no photo — never blocks login.
+async function syncEntraPhoto(user, accessToken) {
+  if (!accessToken || user.get('ProfilePic')) {
+    return;
+  }
+  try {
+    const photoRes = await axios.get('https://graph.microsoft.com/v1.0/me/photo/$value', {
+      headers: { Authorization: `Bearer ${accessToken}` },
+      responseType: 'arraybuffer',
+      timeout: 8000,
+    });
+    const contentType = photoRes.headers['content-type'] || 'image/jpeg';
+    const base64 = Buffer.from(photoRes.data, 'binary').toString('base64');
+    user.set('ProfilePic', `data:${contentType};base64,${base64}`);
+    await user.save(null, { useMasterKey: true });
+  } catch (err) {
+    // 404 = user has no Graph photo; anything else = transient Graph/token issue.
+    console.log('Entra profile photo sync skipped:', err?.response?.status || err?.message);
+  }
 }

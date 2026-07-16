@@ -16,7 +16,7 @@ const getRequestEmail = (
               props: {
                 width: null,
                 height: 50,
-                url: "https://qikinnovation.ams3.digitaloceanspaces.com/logo.png",
+                url: "https://esign.ricohsouthpacific.com/rsp-email-logo.png",
                 alt: "logo",
                 linkHref: null,
                 contentAlignment: "middle"
@@ -52,7 +52,7 @@ const getRequestEmail = (
       data: {
         style: {
           color: "#FFFFFF",
-          backgroundColor: "#47A3AD",
+          backgroundColor: "#D7063B",
           fontSize: 20,
           fontWeight: "bold",
           padding: {
@@ -290,7 +290,7 @@ const getRequestEmail = (
           }
         },
         props: {
-          buttonBackgroundColor: "#D46B0f",
+          buttonBackgroundColor: "#D7063B",
           buttonStyle: "rectangle",
           fullWidth: false,
           size: "medium",

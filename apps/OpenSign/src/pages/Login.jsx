@@ -157,6 +157,8 @@ function Login() {
       if (!idToken) throw new Error("no-id-token");
       const _user = await Parse.Cloud.run("loginwithentra", {
         id_token: idToken,
+        // Graph access token so the server can sync the Entra profile photo.
+        access_token: result?.accessToken,
       });
       if (_user?.sessionToken) {
         await thirdpartyLoginfn(_user.sessionToken);

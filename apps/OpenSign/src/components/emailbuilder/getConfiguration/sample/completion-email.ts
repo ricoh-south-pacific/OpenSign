@@ -16,7 +16,7 @@ const getCompletionEmail = (
               props: {
                 width: null,
                 height: 50,
-                url: "https://qikinnovation.ams3.digitaloceanspaces.com/logo.png",
+                url: "https://esign.ricohsouthpacific.com/rsp-email-logo.png",
                 alt: "logo",
                 linkHref: null,
                 contentAlignment: "middle"
@@ -50,7 +50,7 @@ const getCompletionEmail = (
       data: {
         style: {
           color: "#FFFFFF",
-          backgroundColor: "#47A3AD",
+          backgroundColor: "#D7063B",
           fontSize: 20,
           fontWeight: "bold",
           padding: {

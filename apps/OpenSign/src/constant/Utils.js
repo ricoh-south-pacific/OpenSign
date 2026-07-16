@@ -3560,7 +3560,7 @@ export const flattenPdf = async (pdfFile) => {
 
 export const mailTemplate = (param) => {
   const appName = "RSP eSignature";
-  const logo = `<div style='padding:10px'><img src='https://qikinnovation.ams3.digitaloceanspaces.com/logo.png' height='50' /></div>`;
+  const logo = `<div style='padding:10px'><img src='https://esign.ricohsouthpacific.com/rsp-email-logo.png' height='50' /></div>`;
 
   const subject = `${param.senderName} has requested you to sign "${param.title}"`;
   const body =
@@ -3580,7 +3580,7 @@ export const mailTemplate = (param) => {
     param.note +
     "</td></tr><tr><td></td><td></td></tr></table></div> <div style='margin-left:70px'><a target=_blank href=" +
     param.signingUrl +
-    "><button style='padding:12px;background-color:#d46b0f;color:white;border:0px;font-weight:bold;margin-top:30px'>Sign here</button></a></div><div style='display:flex;justify-content:center;margin-top:10px'></div></div></div><div><p> This is an automated email from " +
+    "><button style='padding:12px;background-color:#D7063B;color:white;border:0px;font-weight:bold;margin-top:30px'>Sign here</button></a></div><div style='display:flex;justify-content:center;margin-top:10px'></div></div></div><div><p> This is an automated email from " +
     appName +
     ". For any queries regarding this email, please contact the sender " +
     param.senderMail +

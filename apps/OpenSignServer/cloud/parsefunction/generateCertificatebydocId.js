@@ -9,7 +9,7 @@ import { getSecureUrl } from '../../Utils.js';
 import { parseUploadFile } from '../../utils/fileUtils.js';
 dotenv.config({ quiet: true });
 const eSignName = 'RSP eSignature';
-const eSigncontact = 'hello@opensignlabs.com';
+const eSigncontact = 'esign@ricohsouthpacific.com';
 
 // `uploadFile` is used to create url in from pdfFile
 async function uploadFile(pdfName, filepath) {

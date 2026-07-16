@@ -24,8 +24,11 @@ export const msalInstance = ssoEnabled
     })
   : null;
 
-// Delegated scopes for basic profile + email.
-export const loginRequest = { scopes: ["openid", "profile", "email"] };
+// Delegated scopes for basic profile + email. User.Read lets us call Microsoft
+// Graph (/me/photo) after sign-in to sync the user's Entra profile photo.
+export const loginRequest = {
+  scopes: ["openid", "profile", "email", "User.Read"],
+};
 
 let initialized = false;
 // MSAL v3+ requires initialize() before any login call.

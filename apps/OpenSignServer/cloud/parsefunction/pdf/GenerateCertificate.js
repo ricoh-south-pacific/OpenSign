@@ -84,7 +84,7 @@ export default async function GenerateCertificate(docDetails) {
     x: 30,
     y: 790,
     width: 100,
-    height: 25,
+    height: 35,
   });
 
   page.drawText(generatedOn, {
